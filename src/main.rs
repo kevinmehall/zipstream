@@ -1,22 +1,3 @@
-extern crate bytes;
-extern crate futures;
-extern crate tokio_io;
-extern crate tokio_fs;
-extern crate hyper;
-extern crate hyper_tls;
-extern crate rusoto_s3;
-extern crate rusoto_core;
-extern crate serde;
-extern crate serde_derive;
-extern crate serde_json;
-extern crate regex;
-extern crate log;
-extern crate env_logger;
-extern crate log_panics;
-extern crate clap;
-extern crate lazy_static;
-extern crate chrono;
-
 mod stream_range;
 mod serve_range;
 mod zip;
@@ -71,7 +52,7 @@ fn main() {
         .get_matches();
 
     let region = rusoto_core::Region::default();
-    let s3_client = Arc::new(rusoto_s3::S3Client::new(region)) as Arc<rusoto_s3::S3 + Send + Sync>;
+    let s3_client = Arc::new(rusoto_s3::S3Client::new(region)) as Arc<dyn rusoto_s3::S3 + Send + Sync>;
 
     let config = Config {
         upstream: matches.value_of("upstream").unwrap().into(),

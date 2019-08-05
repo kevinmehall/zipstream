@@ -3,7 +3,7 @@ use futures::{Future, stream, Stream};
 use bytes::Bytes;
 use rusoto_s3::{ S3, GetObjectRequest, GetObjectError };
 
-type BoxBytesStream = Box<Stream<Item=Bytes, Error=BoxError> + Send>;
+type BoxBytesStream = Box<dyn Stream<Item=Bytes, Error=BoxError> + Send>;
 type BoxError = Box<dyn std::error::Error + 'static + Sync + Send>;
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -47,7 +47,7 @@ impl StreamRange for Bytes {
 
 /// Implements `StreamRange` to serve an object from an S3 bucket
 pub struct S3Object {
-    pub s3: Arc<S3>,
+    pub s3: Arc<dyn S3>,
     pub bucket: String,
     pub key: String,
     pub len: u64,

@@ -73,7 +73,7 @@ fn test_range() {
 
 /// Serve a `StreamRange` in response to a `hyper` request.
 /// This handles the HTTP Range header and "206 Partial content" and associated headers if required
-pub fn hyper_response(req: &Request<Body>, content_type: &str, etag: &str, filename: &str, data: &StreamRange) -> Response<Body> {
+pub fn hyper_response(req: &Request<Body>, content_type: &str, etag: &str, filename: &str, data: &dyn StreamRange) -> Response<Body> {
     let full_len = data.len();
     let full_range = Range { start: 0, end: full_len };
 
