@@ -12,6 +12,9 @@ use hyper::{ Client, Response, Server, StatusCode };
 use hyper::service::service_fn;
 use hyper_tls::HttpsConnector;
 
+#[global_allocator]
+static ALLOC: jemallocator::Jemalloc = jemallocator::Jemalloc;
+
 #[derive(Clone)]
 pub struct Config {
     upstream: String,

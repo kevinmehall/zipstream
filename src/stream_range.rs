@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use futures::{Future, stream, Stream};
 use bytes::Bytes;
-use rusoto_s3::{ S3, GetObjectRequest, GetObjectError };
+use rusoto_s3::{ S3, GetObjectRequest };
 
 type BoxBytesStream = Box<dyn Stream<Item=Bytes, Error=BoxError> + Send>;
 type BoxError = Box<dyn std::error::Error + 'static + Sync + Send>;
@@ -68,10 +68,7 @@ impl StreamRange for S3Object {
 
         Box::new(self.s3.get_object(req)
             .map_err(|err| {
-                match &err {
-                    GetObjectError::Unknown(resp) => format!("S3 GetObject failed with {} {}", resp.status, String::from_utf8_lossy(&resp.body[..])),
-                    err => format!("S3 GetObject failed with {}", err),
-                }.into()
+                format!("S3 GetObject failed with {}", err).into()
             })
             .map(move |res| {
                 log::info!("S3 get complete for {}", url);
